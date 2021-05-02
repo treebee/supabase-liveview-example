@@ -1,0 +1,15 @@
+<div class="container mx-auto pt-8 pb-16 max-w-5xl grid grid-cols-2 xs:grid-cols-1 text-white">
+  <div>
+    <h1 class="text-3xl font-bold">Supabase Auth + Storage for Phoenix LiveView</h1>
+  </div>
+  <div>
+    <p>Sign in with your email and password</p>
+    <%= form_for :user, Routes.login_path(@conn, :login), fn f -> %>
+    <div class="mt-8 relative rounded-sm shadow-sm">
+        <%= text_input f, :email, class: "focus:ring-grey-100 focus:border-grey-100 border-2 border-grey-700 rounded-sm bg-background block w-full p-2 sm:text-sm border-gray-300 rounded-md", placeholder: "Your email" %>
+        <%= password_input f, :password, class: "focus:ring-grey-100 focus:border-grey-100 border-2 border-grey-700 rounded-sm bg-background block w-full p-2 sm:text-sm border-gray-300 rounded-md my-4", placeholder: "Password" %>
+        <%= submit "Login", class: "uppercase focus:ring-grey-100 focus:border-grey-100 border-2 border-grey-700 rounded-sm bg-background block w-full p-2 sm:text-sm border-gray-300 rounded-md mt-4", placeholder: "Your email" %>
+    </div>
+    <% end %>
+  </div>
+</div>
