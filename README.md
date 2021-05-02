@@ -1,19 +1,22 @@
 # SupabaseLiveviewExample
 
-To start your Phoenix server:
+A Phoenix LiveView example application similar to the Supabase [Next example](https://github.com/supabase/supabase/tree/master/examples/nextjs-ts-user-management)
 
-  * Install dependencies with `mix deps.get`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Start Phoenix endpoint with `mix phx.server`
+Code is currently pretty messy and there's no error handling and such things,
+was just interested if I can get this working with [supabase-elixir](https://github.com/supabase/supabase/tree/master/examples/nextjs-ts-user-management).
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Prerequisites
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Needs a Supabase project that has to be set up like described [here](https://github.com/supabase/supabase/tree/master/examples/nextjs-ts-user-management#build-from-scratch).
 
-## Learn more
+## Running the Service
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```bash
+cd assets
+npm i
+cd ..
+mix deps.get
+export SUPABASE_URL="***"
+export SUPABASE_KEY="***"
+mix phx.server
+```
