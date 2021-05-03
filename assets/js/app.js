@@ -16,6 +16,7 @@ import "phoenix_html";
 import { Socket } from "phoenix";
 import topbar from "topbar";
 import { LiveSocket } from "phoenix_live_view";
+import SupabaseUploader from "./supabase_uploader";
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -52,6 +53,9 @@ const Hooks = {
 let liveSocket = new LiveSocket("/live", Socket, {
   params: params,
   hooks: Hooks,
+  uploaders: {
+    Supabase: SupabaseUploader,
+  },
 });
 
 // Show progress bar on live navigation and form submits

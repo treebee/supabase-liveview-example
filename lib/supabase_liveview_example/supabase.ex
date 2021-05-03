@@ -42,8 +42,7 @@ defmodule SupabaseLiveviewExample.Supabase do
       %Finch.Response{status: 201} ->
         :ok
 
-      resp ->
-        IO.inspect(resp)
+      _ ->
         :error
     end
   end

@@ -18,7 +18,11 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
   defp allow_uploads(socket) do
     socket
     |> assign(:uploaded_files, [])
-    |> allow_upload(:avatar, accept: ~w(.jpg .jpeg .png), max_entries: 1)
+    |> allow_upload(:avatar,
+      accept: ~w(.jpg .jpeg .png),
+      max_entries: 1,
+      external: &prepare_upload/2
+    )
   end
 
   @impl true
@@ -27,10 +31,8 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
         session,
         socket
       ) do
-    IO.inspect({"/profile", session, _params, socket.assigns})
     access_token = Map.get(session, "access_token", Map.get(socket.assigns, :access_token))
     refresh_token = Map.get(session, "refresh_token", Map.get(socket.assigns, :refresh_token))
-    IO.inspect({access_token, refresh_token})
     socket = login(socket, %{"access_token" => access_token, "refresh_token" => refresh_token})
     {:ok, allow_uploads(socket)}
   end
@@ -43,17 +45,9 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
   @impl true
   def handle_event("save", _params, socket) do
     [updated_profile] =
-      consume_uploaded_entries(socket, :avatar, fn %{path: path}, entry ->
-        conn = SupabaseLiveviewExample.Supabase.get_connection()
-
-        {:ok, _} =
-          conn
-          |> Supabase.Storage.Objects.create("avatars", entry.client_name, path,
-            content_type: entry.client_type
-          )
-
+      consume_uploaded_entries(socket, :avatar, fn %{} = meta, _entry ->
         profile =
-          Map.put(socket.assigns.profile, "avatar_url", entry.client_name)
+          Map.put(socket.assigns.profile, "avatar_url", meta.config.key)
           |> Map.put("id", socket.assigns.user["id"])
 
         SupabaseLiveviewExample.Supabase.update_profile(profile, socket.assigns.access_token)
@@ -90,6 +84,21 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
       SupabaseLiveviewExample.Supabase.fetch_public_profiles(socket.assigns.access_token)
 
     {:noreply, assign(socket, profile: payload, profiles: profiles)}
+  end
+
+  defp prepare_upload(entry, socket) do
+    bucket = "avatars"
+    key = entry.client_name
+    config = %{bucket: bucket, key: key, access_token: socket.assigns.access_token}
+
+    meta = %{
+      uploader: "Supabase",
+      key: key,
+      url: "#{Application.get_env(:supabase, :base_url)}/storage/v1/object/#{bucket}/#{key}",
+      config: config
+    }
+
+    {:ok, meta, socket}
   end
 
   defp login(socket, %{"access_token" => access_token, "refresh_token" => refresh_token}) do

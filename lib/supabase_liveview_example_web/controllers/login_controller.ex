@@ -2,9 +2,7 @@ defmodule SupabaseLiveviewExampleWeb.LoginController do
   import Plug.Conn
   use SupabaseLiveviewExampleWeb, :controller
 
-  def session(conn, %{"access_token" => access_token, "refresh_token" => refresh_token} = params) do
-    IO.inspect(params)
-
+  def session(conn, %{"access_token" => access_token, "refresh_token" => refresh_token}) do
     conn
     |> put_session(:access_token, access_token)
     |> put_session(:refresh_token, refresh_token)
