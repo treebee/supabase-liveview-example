@@ -97,6 +97,10 @@
   @apply bg-green-500 py-2 uppercase w-full rounded-md;
 }
 
+.btn-outlined {
+  @apply bg-opacity-0 py-2 uppercase w-full rounded-md text-green-500 border-2 border-green-500 hover:bg-green-200;
+}
+
 /* Change the white to any color */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

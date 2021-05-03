@@ -33,6 +33,7 @@ defmodule SupabaseLiveviewExampleWeb.Components.Account do
         </div>
         <%= submit "update", class: "btn mt-6" %>
         <% end %>
+        <button class="mt-6 btn-outlined" phx-click="logout">logout</button>
       </div>
     """
   end

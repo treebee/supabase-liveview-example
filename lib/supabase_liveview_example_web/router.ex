@@ -18,11 +18,9 @@ defmodule SupabaseLiveviewExampleWeb.Router do
   scope "/", SupabaseLiveviewExampleWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/debug", DebugLive, :index
+    live "/", LoginLive, :index
+    live "/profile", PageLive, :index
 
-    get "/login", LoginController, :index
-    post "/login", LoginController, :login
     get "/logout", LoginController, :logout
   end
 
