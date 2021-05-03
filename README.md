@@ -2,6 +2,8 @@
 
 A Phoenix LiveView example application similar to the Supabase [Next example](https://github.com/supabase/supabase/tree/master/examples/nextjs-ts-user-management)
 
+![supabase liveview demo](supabase-liveview.gif)
+
 Code is currently pretty messy and there's no error handling and such things,
 was just interested if I can get this working with [supabase-elixir](https://github.com/supabase/supabase/tree/master/examples/nextjs-ts-user-management).
 
