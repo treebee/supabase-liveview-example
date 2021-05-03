@@ -7,7 +7,7 @@ defmodule SupabaseLiveviewExampleWeb.Components.ProfileList do
       <h3 class="text-lg font-bold">Public Profiles</h3>
       <div class="py-4">
       <%= for profile <- @profiles do %>
-      <div class="flex justify-between mt-4 p-4 border-grey-600 rounded-md border-2 bg-grey-700 bg-opacity-70">
+      <div class="flex mt-4 p-4 border-grey-600 rounded-md border-2 bg-grey-700 bg-opacity-70">
         <%= live_component @socket, SupabaseLiveviewExampleWeb.Components.Avatar, avatar_url: profile["avatar_url"], user: @user %>
         <div class="self-center">
           <p class="text-xl font-bold mb-1"><%= profile["username"] %></p>

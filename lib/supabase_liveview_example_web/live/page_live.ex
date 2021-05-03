@@ -25,6 +25,7 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
               <%= submit "Send Magic Link", class: "uppercase focus:ring-grey-100 focus:border-grey-100 border-2 border-grey-700 rounded-sm bg-background block w-full p-2 sm:text-sm border-gray-300 rounded-md mt-4", placeholder: "Your email" %>
             </div>
           <% end %>
+          <p><%= @email_msg %></p>
         </div>
       <% end %>
     </div>
@@ -50,7 +51,8 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-     assign(socket, user: nil, profile: %{}, profiles: [], email_input: "") |> allow_uploads()}
+     assign(socket, user: nil, profile: %{}, profiles: [], email_input: "", email_msg: "")
+     |> allow_uploads()}
   end
 
   @impl true
@@ -73,7 +75,7 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
   def handle_event("send_magic_link", %{"user" => %{"email" => email}}, socket) do
     SupabaseLiveviewExample.Auth.login_via_magic_link(email)
     # TODO give feedback
-    {:noreply, assign(socket, email_input: "")}
+    {:noreply, assign(socket, email_input: "", email_msg: "Check your emails for a magic link.")}
   end
 
   @impl true
@@ -123,6 +125,7 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
       socket.assigns.profile
       |> Map.put("username", username)
       |> Map.put("website", website)
+      |> Map.put("id", socket.assigns.user["id"])
 
     SupabaseLiveviewExample.Supabase.update_profile(payload, socket.assigns.access_token)
 

@@ -8,10 +8,12 @@ defmodule SupabaseLiveviewExampleWeb.Components.Account do
       <div class="py-4 mb-16">
         <label class="text-grey-500 text-xs uppercase">Avatar Image</label>
         <form id="upload-form" phx-submit="save" phx-change="validate">
-          <%= for entry <- @uploads.avatar.entries do %>
-          <%= live_img_preview entry, width: 80 %>
-          <% end %>
-          <%= live_file_input @uploads.avatar %>
+          <div class="my-2">
+            <%= for entry <- @uploads.avatar.entries do %>
+            <%= live_img_preview entry, width: 80 %>
+            <% end %>
+            <%= live_file_input @uploads.avatar %>
+          </div>
           <button type="submit" class="btn">upload</button>
         </form>
       </div>
