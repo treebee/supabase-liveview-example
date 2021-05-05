@@ -1,4 +1,7 @@
 defmodule SupabaseLiveviewExample.Supabase do
+  import Supabase
+  import Postgrestex
+
   def get_connection() do
     Supabase.Connection.new(
       Application.fetch_env!(:supabase, :base_url),
@@ -7,47 +10,28 @@ defmodule SupabaseLiveviewExample.Supabase do
   end
 
   def fetch_profile(user_id, access_token) do
-    case get_connection()
-         |> Supabase.Connection.get(
-           "/rest/v1/profiles",
-           params: [select: "username,website,avatar_url", id: "eq.#{user_id}"],
-           headers: [auth_header(access_token)]
-         ) do
-      %Finch.Response{body: body, status: 200} -> {:ok, body}
-      %Finch.Response{body: body} -> {:error, body}
-    end
+    Supabase.init(access_token: access_token)
+    |> from("profiles")
+    |> eq("id", user_id)
+    |> call()
+    |> json()
   end
 
   def fetch_public_profiles(access_token) do
-    case get_connection()
-         |> Supabase.Connection.get(
-           "/rest/v1/profiles",
-           headers: [auth_header(access_token)]
-         ) do
-      %Finch.Response{body: body, status: 200} -> {:ok, body}
-      %Finch.Response{body: body} -> {:error, body}
-    end
+    Supabase.init(access_token: access_token)
+    |> from("profiles")
+    |> call()
+    |> json()
   end
 
   def update_profile(
         user_payload,
         access_token
       ) do
-    case get_connection()
-         |> Supabase.Connection.post(
-           "/rest/v1/profiles",
-           {:json, Map.put(user_payload, :updated_at, NaiveDateTime.utc_now())},
-           [auth_header(access_token), {"prefer", "resolution=merge-duplicates"}]
-         ) do
-      %Finch.Response{status: 201} ->
-        :ok
-
-      _ ->
-        :error
-    end
-  end
-
-  defp auth_header(access_token) do
-    {"Authorization", "Bearer #{access_token}"}
+    Supabase.init(access_token: access_token)
+    |> from("profiles")
+    |> update(user_payload)
+    |> call()
+    |> json()
   end
 end

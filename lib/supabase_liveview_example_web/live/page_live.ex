@@ -54,7 +54,7 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
         profile
       end)
 
-    {:ok, profiles} =
+    %{body: profiles} =
       SupabaseLiveviewExample.Supabase.fetch_public_profiles(socket.assigns.access_token)
 
     socket = assign(socket, profiles: profiles)
@@ -80,7 +80,7 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
 
     SupabaseLiveviewExample.Supabase.update_profile(payload, socket.assigns.access_token)
 
-    {:ok, profiles} =
+    %{body: profiles} =
       SupabaseLiveviewExample.Supabase.fetch_public_profiles(socket.assigns.access_token)
 
     {:noreply, assign(socket, profile: payload, profiles: profiles)}
@@ -104,8 +104,8 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
   defp login(socket, %{"access_token" => access_token, "refresh_token" => refresh_token}) do
     case SupabaseLiveviewExample.Auth.token_valid?(access_token) do
       {:ok, user} ->
-        {:ok, profiles} = SupabaseLiveviewExample.Supabase.fetch_public_profiles(access_token)
-        {:ok, profile} = fetch_profile(user, access_token)
+        %{body: profiles} = SupabaseLiveviewExample.Supabase.fetch_public_profiles(access_token)
+        %{body: profile} = fetch_profile(user, access_token)
 
         assign(socket, :user, user)
         |> assign(:access_token, access_token)
@@ -125,8 +125,8 @@ defmodule SupabaseLiveviewExampleWeb.PageLive do
 
   defp fetch_profile(%{"id" => user_id}, access_token) do
     case SupabaseLiveviewExample.Supabase.fetch_profile(user_id, access_token) do
-      {:ok, []} -> {:ok, %{}}
-      {:ok, [profile]} -> {:ok, profile}
+      %{body: []} -> %{body: %{}}
+      %{body: [profile]} -> %{body: profile}
     end
   end
 end
